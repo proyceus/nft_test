@@ -8,14 +8,14 @@ import {
 } from "@material-ui/core";
 import { NFTCard } from "../../Components";
 
-const NFTContainer = ({ nfts }) => {
+const NFTContainer = ({ nfts, handleNftClick }) => {
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3} justifyContent="center">
         {nfts &&
           nfts
             .filter((item) => item.image_url !== "")
-            .map((item) => <NFTCard image={item.image_url} key={item.id} />)}
+            .map((item) => <NFTCard image={item.image_url} key={item.id} handleNftClick={handleNftClick} />)}
       </Grid>
     </Container>
   );
