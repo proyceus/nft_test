@@ -15,6 +15,7 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => setNfts(data.assets))
+      .then(console.log("Fetched"))
       .catch((err) => console.error("error:" + err));
   };
 
@@ -27,10 +28,14 @@ function App() {
     setOffset(Math.floor(Math.random() * 100));
   };
 
+  const handleLoginClick = () => {
+    isLoggedIn === false ? setIsLoggedIn(true) : setIsLoggedIn(false);
+  }
+
   return (
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
-      <SideMenu isLoggedIn={isLoggedIn} />
+      <SideMenu isLoggedIn={isLoggedIn} onClick={handleLoginClick} />
       <Button
         onClick={handleClick}
         startIcon={<RefreshIcon />}
