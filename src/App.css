@@ -41,9 +41,19 @@
   background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%) !important;
   position: fixed !important;
   bottom: 20px;
-  left: 37%;
   z-index: 1;
   width: 500px;
+  left: 50%;
+transform: translate(-50%);
 }
 
 
+.overlay {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, .5);
+  z-index: 100;
+  position:fixed;
+  top: 0;
+  left: 0;
+}

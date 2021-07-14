@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { NFTContainer, SideMenu } from "./Components";
+import { NFTContainer, SideMenu, NFTCardView } from "./Components";
 import { Button, Typography } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
@@ -8,6 +8,7 @@ function App() {
   const [nfts, setNfts] = useState([]);
   const [offset, setOffset] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [cardClick, setCardClick] = useState(false);
 
   const fetchNfts = async () => {
     await fetch(
@@ -32,6 +33,10 @@ function App() {
     isLoggedIn === false ? setIsLoggedIn(true) : setIsLoggedIn(false);
   }
 
+  const handleNftClick = () => {
+    cardClick === false ? setCardClick(true) : setCardClick(false);
+  }
+
   return (
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
@@ -44,7 +49,9 @@ function App() {
       >
         Refresh
       </Button>
-      <NFTContainer nfts={nfts} />
+      {/* <NFTCardView /> */}
+      <NFTContainer nfts={nfts} handleNftClick={handleNftClick} />
+      {cardClick === true && <div className="overlay" onClick={handleNftClick}></div>}
     </div>
   );
 }
