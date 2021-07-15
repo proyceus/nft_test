@@ -3,6 +3,12 @@ import React, { useState, useEffect } from "react";
 import { NFTContainer, TopMenu, NFTCardView } from "./Components";
 import { Button, Typography } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 function App() {
   const [nfts, setNfts] = useState([]);
@@ -11,19 +17,19 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
 
-  const fetchNfts = async () => {
-    await fetch(
-      `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
-    )
-      .then((res) => res.json())
-      .then((data) => setNfts(data.assets))
-      .then(console.log("Fetched"))
-      .catch((err) => console.error("error:" + err));
-  };
+  // const fetchNfts = async () => {
+  //   await fetch(
+  //     `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => setNfts(data.assets))
+  //     .then(console.log("Fetched"))
+  //     .catch((err) => console.error("error:" + err));
+  // };
 
-  useEffect(() => {
-    fetchNfts();
-  }, [offset]);
+  // useEffect(() => {
+  //   fetchNfts();
+  // }, [offset]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -54,6 +60,7 @@ function App() {
   }
 
   return (
+    <Router>
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
       <TopMenu isLoggedIn={isLoggedIn} onClick={handleLoginClick} />
@@ -69,6 +76,7 @@ function App() {
       <NFTContainer nfts={nfts} handleNftClick={handleNftClick} cardClicked={cardClick} />
       {cardClick === true && <div className="overlay" onClick={handleNftClick}></div>}
     </div>
+    </Router>
   );
 }
 
