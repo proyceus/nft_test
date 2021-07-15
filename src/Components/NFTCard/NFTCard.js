@@ -7,7 +7,15 @@ const NFTCard = (props) => {
   return (
     <Grid item xs={3} className="NFTcard" value={props.value} onClick={props.handleNftClick} >
       <Card className="NFTcardimgcontainer">
-        <CardMedia image={props.image} className="NFTcardimage" data-id={props.tokenId} data-contract={props.assetContract}></CardMedia>
+        <CardMedia
+        image={props.image}
+        className="NFTcardimage"
+        data-image={props.image}
+        data-name={props.name}
+        data-linky={props.buyLink}
+        data-description={props.description}
+
+        ></CardMedia>
       </Card>
     </Grid>
   );

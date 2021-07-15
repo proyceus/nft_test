@@ -6,25 +6,20 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 
 function App() {
   const [nfts, setNfts] = useState([]);
-  const [specificAsset, setSpecificAsset] = useState({})
+  const [specificAsset, setSpecificAsset] = useState({image: '', name: '', buylink: '', description: ''})
   const [offset, setOffset] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
 
   const fetchNfts = async () => {
     await fetch(
-      `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=20`
+      `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
     )
       .then((res) => res.json())
       .then((data) => setNfts(data.assets))
       .then(console.log("Fetched"))
       .catch((err) => console.error("error:" + err));
   };
-
-  const fetchSpecificNft = async () => {
-    //start here
-    await fetch()
-  }
 
   useEffect(() => {
     fetchNfts();
@@ -33,6 +28,7 @@ function App() {
   const handleClick = (e) => {
     e.preventDefault();
     setOffset(Math.floor(Math.random() * 100));
+
   };
 
   const handleLoginClick = () => {
@@ -40,11 +36,18 @@ function App() {
   }
 
   const handleNftClick = (e) => {
-    const contract = e.target.dataset.contract;
-    const id = e.target.dataset.id;
-    console.log(contract, id);
-    //Fetch the asset with the contract and id to show in the CardView
-    setSpecificAsset()
+    const image = e.target.dataset.image;
+    const name = e.target.dataset.name;
+    const buylink = e.target.dataset.linky;
+    const description = e.target.dataset.description;
+
+    setSpecificAsset({
+      image: image,
+      name: name,
+      buylink: buylink,
+      description: description
+    })
+
     cardClick === false ? setCardClick(true) : setCardClick(false);
 
   }
@@ -61,7 +64,7 @@ function App() {
       >
         Refresh
       </Button>
-      {cardClick === true && <NFTCardView />}
+      {cardClick === true && <NFTCardView specificAsset={specificAsset} />}
       <NFTContainer nfts={nfts} handleNftClick={handleNftClick} cardClicked={cardClick} />
       {cardClick === true && <div className="overlay" onClick={handleNftClick}></div>}
     </div>

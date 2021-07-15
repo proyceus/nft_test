@@ -19,11 +19,12 @@ const NFTContainer = ({ nfts, handleNftClick, cardClicked }) => {
             image={item.image_url}
             name={item.name}
             assetContract={item.asset_contract.address}
-            externalLink={item.external_link}
+            buyLink={item.permalink}
             tokenId={item.token_id}
             key={item.id}
             handleNftClick={handleNftClick}
-            cardClicked={cardClicked} />)}
+            cardClicked={cardClicked}
+            description={item.description} />)}
       </Grid>
     </Container>
   );
