@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { NFTContainer, SideMenu, NFTCardView } from "./Components";
+import { NFTContainer, TopMenu, NFTCardView } from "./Components";
 import { Button, Typography } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
@@ -56,7 +56,7 @@ function App() {
   return (
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
-      <SideMenu isLoggedIn={isLoggedIn} onClick={handleLoginClick} />
+      <TopMenu isLoggedIn={isLoggedIn} onClick={handleLoginClick} />
       <Button
         onClick={handleClick}
         startIcon={<RefreshIcon />}

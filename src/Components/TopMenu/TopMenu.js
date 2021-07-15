@@ -1,8 +1,8 @@
 import React from "react";
 import { MenuList, MenuItem } from "@material-ui/core";
-import "./SideMenu.css";
+import "./TopMenu.css";
 
-const SideMenu = ({ isLoggedIn, onClick }) => {
+const TopMenu = ({ isLoggedIn, onClick }) => {
   return (
       <MenuList className="horizontal-menu">
         <MenuItem>Home</MenuItem>
@@ -13,4 +13,4 @@ const SideMenu = ({ isLoggedIn, onClick }) => {
   );
 };
 
-export default SideMenu;
+export default TopMenu;
