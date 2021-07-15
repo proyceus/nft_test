@@ -5,10 +5,12 @@ import {
   CardMedia,
   Typography,
   Container,
+  Button
 } from "@material-ui/core";
 import { NFTCard } from "../../Components";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
-const NFTContainer = ({ nfts, handleNftClick, cardClicked }) => {
+const NFTContainer = ({ nfts, handleNftClick, cardClicked, handleButtonClick }) => {
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3} justifyContent="center">
@@ -26,7 +28,16 @@ const NFTContainer = ({ nfts, handleNftClick, cardClicked }) => {
             cardClicked={cardClicked}
             description={item.description} />)}
       </Grid>
+      <Button
+          onClick={handleButtonClick}
+          startIcon={<RefreshIcon />}
+          variant="contained"
+          className="button-refresh"
+          >
+          Refresh
+          </Button>
     </Container>
+
   );
 };
 

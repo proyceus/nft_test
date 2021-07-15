@@ -1,13 +1,12 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { NFTContainer, TopMenu, NFTCardView } from "./Components";
-import { Button, Typography } from "@material-ui/core";
-import RefreshIcon from "@material-ui/icons/Refresh";
+import { NFTContainer, TopMenu, NFTCardView, ProfilePage, FavoritesPage, LoginPage } from "./Components";
+import { Typography } from "@material-ui/core";
+
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 function App() {
@@ -60,23 +59,32 @@ function App() {
   }
 
   return (
-    <Router>
+
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
+      <Router>
       <TopMenu isLoggedIn={isLoggedIn} onClick={handleLoginClick} />
-      <Button
-        onClick={handleClick}
-        startIcon={<RefreshIcon />}
-        variant="contained"
-        className="button-refresh"
-      >
-        Refresh
-      </Button>
+      <Switch>
+        <Route exact path="/">
+          <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
+        </Route>
+        <Route exact path="/profile">
+          <ProfilePage />
+        </Route>
+        <Route exact path="/favorites">
+          <FavoritesPage />
+        </Route>
+        <Route exact path="/login">
+          <LoginPage />
+        </Route>
+      </Switch>
+      </Router>
       {cardClick === true && <NFTCardView specificAsset={specificAsset} handleCancelClick={handleNftClick} />}
-      <NFTContainer nfts={nfts} handleNftClick={handleNftClick} cardClicked={cardClick} />
+
       {cardClick === true && <div className="overlay" onClick={handleNftClick}></div>}
+
     </div>
-    </Router>
+
   );
 }
 
