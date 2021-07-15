@@ -41,15 +41,16 @@ function App() {
     const buylink = e.target.dataset.linky;
     const description = e.target.dataset.description;
 
-    setSpecificAsset({
-      image: image,
-      name: name,
-      buylink: buylink,
-      description: description
-    })
+    if (cardClick === false) {
+      setSpecificAsset({
+        image: image,
+        name: name,
+        buylink: buylink,
+        description: description
+      })
+    }
 
     cardClick === false ? setCardClick(true) : setCardClick(false);
-
   }
 
   return (
@@ -64,7 +65,7 @@ function App() {
       >
         Refresh
       </Button>
-      {cardClick === true && <NFTCardView specificAsset={specificAsset} />}
+      {cardClick === true && <NFTCardView specificAsset={specificAsset} handleCancelClick={handleNftClick} />}
       <NFTContainer nfts={nfts} handleNftClick={handleNftClick} cardClicked={cardClick} />
       {cardClick === true && <div className="overlay" onClick={handleNftClick}></div>}
     </div>

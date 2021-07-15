@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardMedia, Grid } from "@material-ui/core";
 import "./NFTCard.css";
-import { NFTCardView } from "../../Components";
+
 
 const NFTCard = (props) => {
   return (
