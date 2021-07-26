@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { NFTContainer, TopMenu, NFTCardView, ProfilePage, FavoritesPage, LoginPage } from "./Components";
+import { NFTContainer, TopMenu, NFTCardView, ProfilePage, FavoritesPage, LoginPage, SignUpPage } from "./Components";
 import { Typography } from "@material-ui/core";
 
 import {
@@ -15,6 +15,7 @@ function App() {
   const [offset, setOffset] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
+  const [token, setToken] = useState();
 
   const fetchNfts = async () => {
     await fetch(
@@ -36,10 +37,6 @@ function App() {
 
   };
 
-  const handleLoginClick = () => {
-    isLoggedIn === false ? setIsLoggedIn(true) : setIsLoggedIn(false);
-  }
-
   const handleNftClick = (e) => {
     const image = e.target.dataset.image;
     const name = e.target.dataset.name;
@@ -59,6 +56,13 @@ function App() {
   }
 
   const handleFavoriteClick = async (e) => {
+    //make sure that users who are not logged in can't favorite any NFTs
+    // if (!isLoggedIn) {
+    //   console.log("Need to login before you can favorite an NFT");
+    //   return;
+    // } else {
+    //   console.log("Favorited");
+    // }
     const data = {image: document.querySelector('.cardview-image').style.backgroundImage, name: document.querySelector('.info-title').textContent, buyLink: document.querySelector('.buy-button').href, description: document.querySelector('.info-description').textContent};
 
     console.log(data);
@@ -81,7 +85,7 @@ function App() {
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
       <Router>
-      <TopMenu isLoggedIn={isLoggedIn} onClick={handleLoginClick} />
+      <TopMenu isLoggedIn={isLoggedIn} />
       <Switch>
         <Route exact path="/">
           <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
@@ -94,6 +98,9 @@ function App() {
         </Route>
         <Route exact path="/login">
           <LoginPage />
+        </Route>
+        <Route exact path="/signup">
+          <SignUpPage />
         </Route>
       </Switch>
       </Router>

@@ -5,3 +5,4 @@ export { default as TopMenu } from "./TopMenu/TopMenu";
 export { default as ProfilePage } from "./ProfilePage/ProfilePage";
 export { default as FavoritesPage } from "./FavoritesPage/FavoritesPage";
 export { default as LoginPage } from "./LoginPage/LoginPage";
+export { default as SignUpPage } from "./SignUpPage/SignUpPage";
