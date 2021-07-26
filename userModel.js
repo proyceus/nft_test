@@ -8,6 +8,7 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
+  password: String,
   nfts: [{
     image: String,
     name: String,
