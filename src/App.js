@@ -16,19 +16,19 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
 
-  // const fetchNfts = async () => {
-  //   await fetch(
-  //     `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => setNfts(data.assets))
-  //     .then(console.log("Fetched"))
-  //     .catch((err) => console.error("error:" + err));
-  // };
+  const fetchNfts = async () => {
+    await fetch(
+      `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
+    )
+      .then((res) => res.json())
+      .then((data) => setNfts(data.assets))
+      .then(console.log("Fetched"))
+      .catch((err) => console.error("error:" + err));
+  };
 
-  // useEffect(() => {
-  //   fetchNfts();
-  // }, [offset]);
+  useEffect(() => {
+    fetchNfts();
+  }, [offset]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -58,6 +58,24 @@ function App() {
     cardClick === false ? setCardClick(true) : setCardClick(false);
   }
 
+  const handleFavoriteClick = async (e) => {
+    const data = {image: document.querySelector('.cardview-image').style.backgroundImage, name: document.querySelector('.info-title').textContent, buyLink: document.querySelector('.buy-button').href, description: document.querySelector('.info-description').textContent};
+
+    console.log(data);
+
+    await fetch('http://localhost:3001/api/addFavoriteNFT', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch(err => console.error(err));
+  }
+
   return (
 
     <div className="App">
@@ -79,7 +97,7 @@ function App() {
         </Route>
       </Switch>
       </Router>
-      {cardClick === true && <NFTCardView specificAsset={specificAsset} handleCancelClick={handleNftClick} />}
+      {cardClick === true && <NFTCardView specificAsset={specificAsset} handleCancelClick={handleNftClick} handleFavoriteClick={handleFavoriteClick} />}
 
       {cardClick === true && <div className="overlay" onClick={handleNftClick}></div>}
 
