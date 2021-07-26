@@ -14,21 +14,7 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true, useCreat
 
 // Create Mongoose Schema
 
-const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  nfts: [{
-    image: String,
-    name: String,
-    buyLink: String,
-    description: String
-  }]
-})
 
 // Connect and configure Express
 const app = express();
