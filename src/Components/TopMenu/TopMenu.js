@@ -5,20 +5,23 @@ import {
   Link
 } from "react-router-dom";
 
-const TopMenu = ({ isLoggedIn, onClick }) => {
+const TopMenu = ({ isLoggedIn }) => {
   return (
       <MenuList className="horizontal-menu">
         <Link to="/">
           <MenuItem>Home</MenuItem>
         </Link>
         <Link to="/profile">
-          <MenuItem>My Profile</MenuItem>
+          {isLoggedIn === true && <MenuItem>My Profile</MenuItem>}
         </Link>
         <Link to="/favorites">
-          <MenuItem>Favorites</MenuItem>
+        {isLoggedIn === true && <MenuItem>Favorites</MenuItem>}
         </Link>
         <Link to="/login">
-          <MenuItem onClick={onClick}>{isLoggedIn ? "Log out" : "Log in"}</MenuItem>
+          <MenuItem>{isLoggedIn ? "Log out" : "Log in"}</MenuItem>
+        </Link>
+        <Link to="/signup">
+          <MenuItem>{isLoggedIn ? "" : "Sign up"}</MenuItem>
         </Link>
       </MenuList>
   );
