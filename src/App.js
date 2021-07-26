@@ -15,7 +15,6 @@ function App() {
   const [offset, setOffset] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
-  const [token, setToken] = useState();
 
   const fetchNfts = async () => {
     await fetch(
