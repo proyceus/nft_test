@@ -5,7 +5,7 @@ import {
   Link
 } from "react-router-dom";
 
-const TopMenu = ({ isLoggedIn }) => {
+const TopMenu = ({ isLoggedIn, handleLogoutClick }) => {
   return (
       <MenuList className="horizontal-menu">
         <Link to="/">
@@ -18,7 +18,7 @@ const TopMenu = ({ isLoggedIn }) => {
         {isLoggedIn === true && <MenuItem>Favorites</MenuItem>}
         </Link>
         <Link to="/login">
-          <MenuItem>{isLoggedIn ? "Log out" : "Log in"}</MenuItem>
+          <MenuItem onClick={handleLogoutClick}>{isLoggedIn ? "Log out" : "Log in"}</MenuItem>
         </Link>
         <Link to="/signup">
           <MenuItem>{isLoggedIn ? "" : "Sign up"}</MenuItem>

@@ -15,9 +15,9 @@ function App() {
   const [offset, setOffset] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
-  const [token, setToken] = useState({username: '', password: ''});
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [token, setToken] = useState();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   //get NFTs from OpenSea API
   const fetchNfts = async () => {
@@ -32,8 +32,8 @@ function App() {
 
   //handle when user logs in, should check database for credentials and if confirmed, set the token
   const loginUser = async (credentials) => {
-    return await fetch(
-      'http://localhost:3001/api/addFavoriteNFT', {
+    return fetch(
+      'http://localhost:3001/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -41,10 +41,27 @@ function App() {
         body: JSON.stringify(credentials)
       }
     )
-    .then(data => data.json())
+    .then(res => res.json())
+    .catch(err => console.log(err.message))
+  };
+
+  const signupUser = async (credentials) => {
+    return fetch(
+      'http://localhost:3001/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+      }
+    )
+    .then(res => {if (res.status === 201) {setIsLoggedIn(true); res.json()}})
+    .then((data) => setToken(data))
     .catch(err => console.log(err.message));
   }
 
+
+  //figure out a way to not allow everyone to just sign in, needs to set the isloggedin state to true but only when it's a valid login
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     const userToken = await loginUser({
@@ -52,11 +69,24 @@ function App() {
       password
     });
     setToken(userToken);
+    setIsLoggedIn(true);
+    console.log(token);
   }
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+    await signupUser({
+      username,
+      password
+    });
+  }
+
 
   useEffect(() => {
     fetchNfts();
   }, [offset]);
+
+
 
   //lazy solution to refreshing the NFTs coming in to get the most up to date
   const handleClick = (e) => {
@@ -109,27 +139,41 @@ function App() {
     .catch(err => console.error(err));
   }
 
+  const handleLogoutClick = () => {
+    setIsLoggedIn(false);
+    setToken({});
+  }
+
   return (
 
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
       <Router>
-      <TopMenu isLoggedIn={isLoggedIn} />
+      <TopMenu isLoggedIn={isLoggedIn} handleLogoutClick={handleLogoutClick} />
       <Switch>
         <Route exact path="/">
           <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
         </Route>
         <Route exact path="/profile">
-          <ProfilePage />
+          <ProfilePage loginToken={token} />
         </Route>
         <Route exact path="/favorites">
           <FavoritesPage />
         </Route>
         <Route exact path="/login">
-          <LoginPage handleLoginSubmit={handleLoginSubmit} />
+          {isLoggedIn === false && <LoginPage
+          handleLoginSubmit={handleLoginSubmit}
+          setPassword={setPassword}
+          setUsername={setUsername}
+          />}
         </Route>
         <Route exact path="/signup">
-          <SignUpPage />
+          {isLoggedIn === false &&
+          <SignUpPage
+          handleSignupSubmit={handleSignupSubmit}
+          setPassword={setPassword}
+          setUsername={setUsername}
+          />}
         </Route>
       </Switch>
       </Router>
