@@ -15,7 +15,11 @@ function App() {
   const [offset, setOffset] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
+  const [token, setToken] = useState({username: '', password: ''});
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
 
+  //get NFTs from OpenSea API
   const fetchNfts = async () => {
     await fetch(
       `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
@@ -26,16 +30,42 @@ function App() {
       .catch((err) => console.error("error:" + err));
   };
 
+  //handle when user logs in, should check database for credentials and if confirmed, set the token
+  const loginUser = async (credentials) => {
+    return await fetch(
+      'http://localhost:3001/api/addFavoriteNFT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+      }
+    )
+    .then(data => data.json())
+    .catch(err => console.log(err.message));
+  }
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    const userToken = await loginUser({
+      username,
+      password
+    });
+    setToken(userToken);
+  }
+
   useEffect(() => {
     fetchNfts();
   }, [offset]);
 
+  //lazy solution to refreshing the NFTs coming in to get the most up to date
   const handleClick = (e) => {
     e.preventDefault();
     setOffset(Math.floor(Math.random() * 100));
 
   };
 
+  //clicking on an NFT will initiate a pop up with more information and links specific to that NFT
   const handleNftClick = (e) => {
     const image = e.target.dataset.image;
     const name = e.target.dataset.name;
@@ -96,7 +126,7 @@ function App() {
           <FavoritesPage />
         </Route>
         <Route exact path="/login">
-          <LoginPage />
+          <LoginPage handleLoginSubmit={handleLoginSubmit} />
         </Route>
         <Route exact path="/signup">
           <SignUpPage />
