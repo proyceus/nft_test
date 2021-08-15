@@ -21,8 +21,9 @@ function App() {
 
   //get NFTs from OpenSea API
   const fetchNfts = async () => {
+    //fetching assets based on sale date and showing from most recent sale
     await fetch(
-      `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${offset}&limit=10`
+      `https://api.opensea.io/api/v1/assets?order_by=sale_date&order_direction=desc&limit=20`
     )
       .then((res) => res.json())
       .then((data) => setNfts(data.assets))
@@ -69,7 +70,7 @@ function App() {
       password
     });
     setToken(userToken);
-    setIsLoggedIn(true);
+
     console.log(token);
   }
 
@@ -84,7 +85,8 @@ function App() {
 
   useEffect(() => {
     fetchNfts();
-  }, [offset]);
+  }, []);
+
 
 
 
@@ -92,6 +94,7 @@ function App() {
   const handleClick = (e) => {
     e.preventDefault();
     setOffset(Math.floor(Math.random() * 100));
+    fetchNfts();
 
   };
 
