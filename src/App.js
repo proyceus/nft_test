@@ -11,8 +11,7 @@ import {
 
 function App() {
   const [nfts, setNfts] = useState([]);
-  const [specificAsset, setSpecificAsset] = useState({image: '', name: '', buylink: '', description: ''})
-  const [offset, setOffset] = useState(0);
+  const [specificAsset, setSpecificAsset] = useState({image: '', name: '', buylink: '', description: ''});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
   const [token, setToken] = useState();
@@ -31,56 +30,38 @@ function App() {
       .catch((err) => console.error("error:" + err));
   };
 
-  //handle when user logs in, should check database for credentials and if confirmed, set the token
-  const loginUser = async (credentials) => {
-    return fetch(
+  //figure out a way to not allow everyone to just sign in, needs to set the isloggedin state to true but only when it's a valid login
+  const handleLoginSubmit = () => {
+    fetch(
       'http://localhost:3001/api/login', {
         method: 'POST',
         headers: {
+          'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify({username, password})
       }
     )
     .then(res => res.json())
     .catch(err => console.log(err.message))
   };
 
-  const signupUser = async (credentials) => {
-    return fetch(
-      'http://localhost:3001/api/signup', {
+
+  const handleSignupSubmit = () => {
+    fetch(
+      'http://localhost:3001/api/register', {
         method: 'POST',
         headers: {
+          'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify({username, password})
       }
     )
-    .then(res => {if (res.status === 201) {setIsLoggedIn(true); res.json()}})
-    .then((data) => setToken(data))
-    .catch(err => console.log(err.message));
-  }
-
-
-  //figure out a way to not allow everyone to just sign in, needs to set the isloggedin state to true but only when it's a valid login
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    const userToken = await loginUser({
-      username,
-      password
-    });
-    setToken(userToken);
-
-    console.log(token);
-  }
-
-  const handleSignupSubmit = async (e) => {
-    e.preventDefault();
-    await signupUser({
-      username,
-      password
-    });
-  }
+    .then(res => res.json())
+    .then(setIsLoggedIn(true))
+    .catch(err => console.log(err.message))
+  };
 
 
   useEffect(() => {
@@ -93,7 +74,6 @@ function App() {
   //lazy solution to refreshing the NFTs coming in to get the most up to date
   const handleClick = (e) => {
     e.preventDefault();
-    setOffset(Math.floor(Math.random() * 100));
     fetchNfts();
 
   };

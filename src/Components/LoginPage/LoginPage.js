@@ -6,19 +6,15 @@ const LoginPage = ({handleLoginSubmit, setPassword, setUsername}) => {
   return (
     <div className="login-wrapper">
       <h1>Please Log In</h1>
-      <form onSubmit={handleLoginSubmit}>
-      <label>
+      <div>
         <p>Username</p>
         <input type="text" onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <label>
         <p>Password</p>
         <input type="password" onChange={(e) => setPassword(e.target.value)} />
-      </label>
       <div>
-        <Button type="submit">Submit</Button>
+        <Button onSubmit={handleLoginSubmit} type="submit">Submit</Button>
       </div>
-    </form>
+    </div>
     </div>
   )
 }
