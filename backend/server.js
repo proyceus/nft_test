@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const passportLocal = require('passport-local').Strategy;
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const expressSession = require('express-session')({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false
-})
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
+const User = require('./user');
+
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
@@ -23,13 +23,24 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true, useCreat
 // Connect and configure Express
 const app = express();
 
-app.use(cors());
-app.use('/public', express.static(process.cwd() + '/public'));
-app.use(express.static("public"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false}));
-app.use(expressSession);
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
+
+app.use(session({
+  secret: "secretcode",
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+require('./passportConfig')(passport);
 
 // Import Express routes
 require('./routes')(app);
@@ -39,15 +50,4 @@ require('./routes')(app);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Your app is listening on port ${port}`);
-})
-
-//Set up passport for user authentication
-
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-const Account = require('./account.js');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
+});
