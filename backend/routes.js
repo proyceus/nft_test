@@ -1,26 +1,46 @@
 const passport = require('passport');
-const Account = require('./account.js');
+const User = require('./user');
+const bcrypto = require('bcryptojs');
 
 module.exports = function(app) {
-  app.post('/api/register', function(req, res) {
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-        if (err) {
-            console.error(err);
-        }
+  app.post("/login", (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) throw err;
+      if (!user) res.send("No user exists");
+      else {
+        req.logIn(user, err => {
+          if (err) throw err;
+          res.send("Successfully authenticated");
+          console.log(user);
+        })
+      }
+    })(req, res, next);
+  });
 
-        passport.authenticate('local')(req, res, function () {
-          res.send('User created')
+  app.post("/register", (req, res) => {
+    User.findOne({username: req.body.username}, async (err, doc) => {
+      if (err) throw err;
+      if (doc) res.send("User already exists");
+      if (!doc) {
+        const hashedPassword = bcrypt.hash(req.body.password, 10);
+
+        const newUser = new User({
+          username: req.body.username,
+          password: hashedPassword
         });
+
+        await newUser.save();
+        res.send("User created");
+      }
     });
   });
 
-  app.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/');
+  app.get("/getuser", (req, res) => {
+    res.send(req.user);
   });
 
-  app.get('/logout', function(req, res) {
+  app.get("/logout", (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.send("Successfully logged out");
   });
-
 }

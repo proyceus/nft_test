@@ -33,7 +33,7 @@ function App() {
   //figure out a way to not allow everyone to just sign in, needs to set the isloggedin state to true but only when it's a valid login
   const handleLoginSubmit = () => {
     fetch(
-      'http://localhost:3001/api/login', {
+      'http://localhost:3001/login', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -49,7 +49,7 @@ function App() {
 
   const handleSignupSubmit = () => {
     fetch(
-      'http://localhost:3001/api/register', {
+      'http://localhost:3001/register', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
