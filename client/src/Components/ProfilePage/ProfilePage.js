@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { Typography, Container, Grid } from '@material-ui/core';
+import { Typography, Container, Grid, Box } from '@material-ui/core';
 import { NFTCard } from "../../Components";
 
 const ProfilePage = ({favoriteNfts, handleNftClick, cardClicked, getNfts}) => {
@@ -10,7 +10,9 @@ const ProfilePage = ({favoriteNfts, handleNftClick, cardClicked, getNfts}) => {
 
   return (
     <>
-      <Typography variant="h1">Your Favorites</Typography>
+      <Box mb={4}>
+        <Typography variant="h3">Your Favorites</Typography>
+      </Box>
       <Container maxWidth="lg">
       <Grid container spacing={3} justifyContent="center">
         {favoriteNfts &&
