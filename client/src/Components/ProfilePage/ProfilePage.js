@@ -2,33 +2,29 @@ import React, {useEffect} from 'react';
 import { Typography, Container, Grid } from '@material-ui/core';
 import { NFTCard } from "../../Components";
 
-const ProfilePage = ({getNfts}) => {
+const ProfilePage = ({favoriteNfts, handleNftClick, cardClicked, getNfts}) => {
 
   useEffect(() => {
-    getNfts();
+    getNfts()
   }, [])
-
 
   return (
     <>
       <Typography variant="h1">Your Favorites</Typography>
-      {/* <Container maxWidth="lg">
+      <Container maxWidth="lg">
       <Grid container spacing={3} justifyContent="center">
-        {nfts &&
-          nfts
-            .filter((item) => item.image_url !== "")
+        {favoriteNfts &&
+          favoriteNfts
             .map((item) => <NFTCard
-            image={item.image_url}
+            image={item.image.slice(5, item.image.length -2 )}
             name={item.name}
-            assetContract={item.asset_contract.address}
             buyLink={item.permalink}
-            tokenId={item.token_id}
-            key={item.id}
+            key={item._id}
             handleNftClick={handleNftClick}
             cardClicked={cardClicked}
             description={item.description} />)}
       </Grid>
-    </Container> */}
+    </Container>
     </>
   )
 }

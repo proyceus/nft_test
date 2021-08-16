@@ -12,6 +12,7 @@ import {
 
 function App() {
   const [nfts, setNfts] = useState([]);
+  const [favoriteNfts, setFavoriteNfts] = useState([]);
   const [specificAsset, setSpecificAsset] = useState({image: '', name: '', buylink: '', description: ''});
   const [cardClick, setCardClick] = useState(false);
   const [registerUsername, setRegisterUsername] = useState('');
@@ -148,7 +149,9 @@ function App() {
       withCredentials: true,
       url: "http://localhost:3001/nfts"
     })
-    .then(res => console.log(res.data));
+    .then((res) => setFavoriteNfts(res.data))
+    .then(console.log("Fetched Favorites"))
+    .catch((err) => console.error("error:" + err));
   }
 
   return (
@@ -162,7 +165,7 @@ function App() {
           <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
         </Route>
         <Route exact path="/profile">
-          <ProfilePage userData={data} getNfts={getFavoriteNfts} />
+          <ProfilePage userData={data} getNfts={getFavoriteNfts} favoriteNfts={favoriteNfts} handleNftClick={handleNftClick} cardClick={cardClick} />
         </Route>
         <Route exact path="/login">
           {isLoggedIn === false && <LoginPage
