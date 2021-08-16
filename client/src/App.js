@@ -7,7 +7,7 @@ import axios from 'axios';
 import {
   BrowserRouter as Router,
   Switch,
-  Route, useHistory
+  Route
 } from "react-router-dom";
 
 function App() {
@@ -21,7 +21,6 @@ function App() {
   const [data, setData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const history = useHistory();
 
   //get NFTs from OpenSea API
   const fetchNfts = async () => {
@@ -47,8 +46,7 @@ function App() {
     })
     .then(res => {
       console.log(res);
-      setData(res.data);
-      history.push('/profile')
+      setData(res);
     })
     .then(setIsLoggedIn(true))
   };
@@ -68,12 +66,14 @@ function App() {
   };
 
   const getUser = () => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: "http://localhost:3001/getuser"
-    })
-    .then(res => console.log(res))
+    // axios({
+    //   method: "GET",
+    //   withCredentials: true,
+    //   url: "http://localhost:3001/getuser"
+    // })
+    // .then(res => console.log(res.data))
+
+    console.log(data);
   };
 
   const logoutUser = () => {
@@ -84,7 +84,6 @@ function App() {
     })
     .then(res => console.log(res))
     .then(setIsLoggedIn(false))
-    .then(history.push('/'))
   };
 
 
@@ -121,7 +120,7 @@ function App() {
     cardClick === false ? setCardClick(true) : setCardClick(false);
   }
 
-  const handleFavoriteClick = async (e) => {
+  const handleFavoriteClick = async () => {
     //make sure that users who are not logged in can't favorite any NFTs
     // if (!isLoggedIn) {
     //   console.log("Need to login before you can favorite an NFT");
@@ -129,31 +128,30 @@ function App() {
     // } else {
     //   console.log("Favorited");
     // }
-    const data = {image: document.querySelector('.cardview-image').style.backgroundImage, name: document.querySelector('.info-title').textContent, buyLink: document.querySelector('.buy-button').href, description: document.querySelector('.info-description').textContent};
 
-    console.log(data);
-
-    await fetch('http://localhost:3001/api/addFavoriteNFT', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+    axios({
+      method: "POST",
+      data: {
+        username: data.data.username,
+        image: document.querySelector('.cardview-image').style.backgroundImage,
+        name: document.querySelector('.info-title').textContent,
+        buyLink: document.querySelector('.buy-button').href,
+        description: document.querySelector('.info-description').textContent
       },
-      body: JSON.stringify(data),
+      withCredentials: true,
+      url: "http://localhost:3001/favoritenfts"
     })
-    .then(response => response.json())
-    .then(data => console.log('Success:', data))
-    .catch(err => console.error(err));
+    .then(res => console.log(res))
   };
 
   return (
 
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
-      <Router history={history}>
+      <Router>
       <TopMenu isLoggedIn={isLoggedIn} handleLogoutClick={logoutUser} getUser={getUser} />
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/" onEnter={fetchNfts}>
           <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
         </Route>
         <Route exact path="/profile">

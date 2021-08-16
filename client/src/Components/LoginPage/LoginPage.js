@@ -2,7 +2,9 @@ import React from 'react';
 import { Typography, Button } from '@material-ui/core';
 import './LoginPage.css';
 
-const LoginPage = ({handleLoginSubmit, setPassword, setUsername}) => {
+const LoginPage = ({handleLoginSubmit, setPassword, setUsername, isLoggedIn}) => {
+
+
   return (
     <div className="login-wrapper">
       <h1>Please Log In</h1>

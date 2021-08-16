@@ -10,8 +10,7 @@ module.exports = function(app) {
       else {
         req.logIn(user, err => {
           if (err) throw err;
-          res.send("Successfully authenticated");
-          console.log(user);
+          res.send(user);
         })
       }
     })(req, res, next);
@@ -35,8 +34,24 @@ module.exports = function(app) {
     });
   });
 
+  app.post("/favoritenfts", (req, res) => {
+    User.updateOne({
+      username: req.body.username
+    }, {
+      $push: {"nfts": {
+        image: req.body.image,
+        name: req.body.name,
+        buyLink: req.body.buyLink,
+        description: req.body.description
+      }}
+    }, (err, doc) => {
+      if (err) console.error(err);
+      res.send("Successfully favorited")
+    });
+  });
+
   app.get("/getuser", (req, res) => {
-    res.send(req.user);
+    res.json(req.user);
   });
 
   app.get("/logout", (req, res) => {
