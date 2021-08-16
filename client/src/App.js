@@ -120,13 +120,11 @@ function App() {
   }
 
   const handleFavoriteClick = async () => {
-    //make sure that users who are not logged in can't favorite any NFTs
-    // if (!isLoggedIn) {
-    //   console.log("Need to login before you can favorite an NFT");
-    //   return;
-    // } else {
-    //   console.log("Favorited");
-    // }
+    // make sure that users who are not logged in can't favorite any NFTs
+    if (!isLoggedIn) {
+      console.log("Need to login before you can favorite an NFT");
+      return;
+    }
 
     axios({
       method: "POST",
