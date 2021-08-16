@@ -58,4 +58,14 @@ module.exports = function(app) {
     req.logout();
     res.send("Successfully logged out");
   });
+
+  app.get("/nfts", async (req, res) => {
+    const username = await req.user.username;
+    User.findOne({username: username}, (err, doc) => {
+      if (err) console.error(err);
+
+
+      res.send(doc.nfts);
+    })
+  });
 }

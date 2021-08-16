@@ -66,14 +66,12 @@ function App() {
   };
 
   const getUser = () => {
-    // axios({
-    //   method: "GET",
-    //   withCredentials: true,
-    //   url: "http://localhost:3001/getuser"
-    // })
-    // .then(res => console.log(res.data))
-
-    console.log(data);
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:3001/getuser"
+    })
+    .then(res => console.log(res.data))
   };
 
   const logoutUser = () => {
@@ -144,6 +142,15 @@ function App() {
     .then(res => console.log(res))
   };
 
+  const getFavoriteNfts = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:3001/nfts"
+    })
+    .then(res => console.log(res.data));
+  }
+
   return (
 
     <div className="App">
@@ -155,7 +162,7 @@ function App() {
           <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
         </Route>
         <Route exact path="/profile">
-          <ProfilePage userData={data} />
+          <ProfilePage userData={data} getNfts={getFavoriteNfts} />
         </Route>
         <Route exact path="/login">
           {isLoggedIn === false && <LoginPage

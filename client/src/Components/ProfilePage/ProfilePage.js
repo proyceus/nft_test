@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Typography, Container, Grid } from '@material-ui/core';
 import { NFTCard } from "../../Components";
 
-const ProfilePage = () => {
+const ProfilePage = ({getNfts}) => {
+
+  useEffect(() => {
+    getNfts();
+  }, [])
 
 
   return (
