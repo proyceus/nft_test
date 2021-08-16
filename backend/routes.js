@@ -1,6 +1,6 @@
 const passport = require('passport');
 const User = require('./user');
-const bcrypto = require('bcryptojs');
+const bcrypt = require('bcryptjs');
 
 module.exports = function(app) {
   app.post("/login", (req, res, next) => {
@@ -22,7 +22,7 @@ module.exports = function(app) {
       if (err) throw err;
       if (doc) res.send("User already exists");
       if (!doc) {
-        const hashedPassword = bcrypt.hash(req.body.password, 10);
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
         const newUser = new User({
           username: req.body.username,
