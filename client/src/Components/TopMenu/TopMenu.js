@@ -21,7 +21,6 @@ const TopMenu = ({ isLoggedIn, handleLogoutClick, getUser }) => {
         <Link to="/signup">
           <MenuItem>{isLoggedIn ? "" : "Sign up"}</MenuItem>
         </Link>
-        <MenuItem onClick={getUser}>Get user</MenuItem>
       </MenuList>
   );
 };
