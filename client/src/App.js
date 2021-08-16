@@ -1,22 +1,27 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { NFTContainer, TopMenu, NFTCardView, ProfilePage, FavoritesPage, LoginPage, SignUpPage } from "./Components";
+import { NFTContainer, TopMenu, NFTCardView, ProfilePage, LoginPage, SignUpPage } from "./Components";
 import { Typography } from "@material-ui/core";
+import axios from 'axios';
 
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route, useHistory
 } from "react-router-dom";
 
 function App() {
   const [nfts, setNfts] = useState([]);
   const [specificAsset, setSpecificAsset] = useState({image: '', name: '', buylink: '', description: ''});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cardClick, setCardClick] = useState(false);
-  const [token, setToken] = useState();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [registerUsername, setRegisterUsername] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [data, setData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const history = useHistory();
 
   //get NFTs from OpenSea API
   const fetchNfts = async () => {
@@ -30,37 +35,56 @@ function App() {
       .catch((err) => console.error("error:" + err));
   };
 
-  //figure out a way to not allow everyone to just sign in, needs to set the isloggedin state to true but only when it's a valid login
   const handleLoginSubmit = () => {
-    fetch(
-      'http://localhost:3001/login', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({username, password})
-      }
-    )
-    .then(res => res.json())
-    .catch(err => console.log(err.message))
+    axios({
+      method: "POST",
+      data: {
+        username: loginUsername,
+        password: loginPassword
+      },
+      withCredentials: true,
+      url: "http://localhost:3001/login"
+    })
+    .then(res => {
+      console.log(res);
+      setData(res.data);
+      history.push('/profile')
+    })
+    .then(setIsLoggedIn(true))
   };
 
 
   const handleSignupSubmit = () => {
-    fetch(
-      'http://localhost:3001/register', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({username, password})
-      }
-    )
-    .then(res => res.json())
-    .then(setIsLoggedIn(true))
-    .catch(err => console.log(err.message))
+    axios({
+      method: "POST",
+      data: {
+        username: registerUsername,
+        password: registerPassword
+      },
+      withCredentials: true,
+      url: "http://localhost:3001/register"
+    })
+    .then(res => console.log(res))
+  };
+
+  const getUser = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:3001/getuser"
+    })
+    .then(res => console.log(res))
+  };
+
+  const logoutUser = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:3001/logout"
+    })
+    .then(res => console.log(res))
+    .then(setIsLoggedIn(false))
+    .then(history.push('/'))
   };
 
 
@@ -120,42 +144,34 @@ function App() {
     .then(response => response.json())
     .then(data => console.log('Success:', data))
     .catch(err => console.error(err));
-  }
-
-  const handleLogoutClick = () => {
-    setIsLoggedIn(false);
-    setToken({});
-  }
+  };
 
   return (
 
     <div className="App">
       <Typography variant="h1">NFT Land</Typography>
-      <Router>
-      <TopMenu isLoggedIn={isLoggedIn} handleLogoutClick={handleLogoutClick} />
+      <Router history={history}>
+      <TopMenu isLoggedIn={isLoggedIn} handleLogoutClick={logoutUser} getUser={getUser} />
       <Switch>
         <Route exact path="/">
           <NFTContainer nfts={nfts} handleNftClick={handleNftClick} handleButtonClick={handleClick} cardClicked={cardClick} />
         </Route>
         <Route exact path="/profile">
-          <ProfilePage loginToken={token} />
-        </Route>
-        <Route exact path="/favorites">
-          <FavoritesPage />
+          <ProfilePage userData={data} />
         </Route>
         <Route exact path="/login">
           {isLoggedIn === false && <LoginPage
           handleLoginSubmit={handleLoginSubmit}
-          setPassword={setPassword}
-          setUsername={setUsername}
+          setPassword={setLoginPassword}
+          setUsername={setLoginUsername}
           />}
         </Route>
         <Route exact path="/signup">
           {isLoggedIn === false &&
           <SignUpPage
           handleSignupSubmit={handleSignupSubmit}
-          setPassword={setPassword}
-          setUsername={setUsername}
+          setPassword={setRegisterPassword}
+          setUsername={setRegisterUsername}
           />}
         </Route>
       </Switch>

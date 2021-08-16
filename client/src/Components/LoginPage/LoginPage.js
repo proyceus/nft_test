@@ -12,7 +12,7 @@ const LoginPage = ({handleLoginSubmit, setPassword, setUsername}) => {
         <p>Password</p>
         <input type="password" onChange={(e) => setPassword(e.target.value)} />
       <div>
-        <Button onSubmit={handleLoginSubmit} type="submit">Submit</Button>
+        <Button onClick={handleLoginSubmit}>Submit</Button>
       </div>
     </div>
     </div>
